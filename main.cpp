@@ -44,11 +44,14 @@ void DrawCutImage(int x, int y, int cx, int cy, int cw, int ch, SDL_Surface *ima
 
 SDL_Surface *iconImage = NULL;
 
+SDL_Surface *backgroundImage = NULL;
+
 
 // use essa função pra carregar arquivos
 // nota: essa função só deve ser chamada no começo do programa
 void LoadFiles()
 {
+    backgroundImage = SDL_LoadBMP("background.bmp");
 }
 
 // use essa função pra fechar arquivos
@@ -56,6 +59,13 @@ void LoadFiles()
 void CloseFiles()
 {
     SDL_FreeSurface(iconImage);
+    SDL_FreeSurface(backgroundImage);
+}
+
+// desenha o background na tela do jogo
+void DrawBackground()
+{
+    DrawImage(0,0,backgroundImage);
 }
 
 int main(int argc, char*args[])
@@ -85,6 +95,9 @@ while(executando)
     }
 
     SDL_FillRect(tela, 0, 0xffffff);
+
+    DrawBackground();
+
     SDL_Flip(tela);
     if(framerate > (SDL_GetTicks()-start))
     {
