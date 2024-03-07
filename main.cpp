@@ -13,7 +13,7 @@ Uint32 start = 0;
 const int fps = 30;
 const int framerate =  1000/fps;
 
-// use essa função pra desenhar uma imagem
+// use essa função pra desenhar uma imagem na tela
 void DrawImage(int x, int y, SDL_Surface *image)
 {
     SDL_Rect mover;
@@ -43,10 +43,7 @@ void DrawCutImage(int x, int y, int cx, int cy, int cw, int ch, SDL_Surface *ima
 
 
 SDL_Surface *iconImage = NULL;
-
 SDL_Surface *backgroundImage = NULL;
-
-
 SDL_Surface *TilesImage = NULL;
 
 
@@ -73,7 +70,9 @@ void DrawBackground()
     DrawImage(0,0,backgroundImage);
 }
 
-// 7 peças cada bloco é formado por 4 números
+// essa estrutura representa uma matriz
+// 7 peças cada peça é formada por 4 números
+// veja o arquivo explicação.txt
 int figures[7][4]
 {
     1,3,5,7, // I
@@ -139,7 +138,6 @@ while(executando)
     SDL_FillRect(tela, 0, 0xffffff);
 
     DrawBackground();
-
     DrawPieces();
 
     SDL_Flip(tela);

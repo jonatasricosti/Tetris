@@ -1,0 +1,56 @@
+x = 0 até 1  x % 2
+y = 0 até 3  y / 2
+
+0  1 
+2  3 
+4  5 
+6  7 
+
+I
+currentPiece = 0
+0 |1|
+2 |3|
+4 |5| 
+6 |7|
+
+Z
+currentPiece = 1
+ 0  1 
+|2| 3 
+|4||5| 
+ 6 |7| 
+
+S
+currentPiece = 2
+0  1 
+2  |3| 
+|4||5| 
+|6| 7
+
+T
+currentPiece = 3
+0  1 
+2  |3| 
+|4||5| 
+6  |7|
+
+L
+currentPiece = 4
+0  1 
+|2||3| 
+4  |5| 
+6  |7|
+
+J
+currentPiece = 5
+0  1 
+2  |3| 
+4  |5| 
+|6||7|
+
+O
+currentPiece = 6
+0  1 
+|2||3| 
+|4||5| 
+6  7 
