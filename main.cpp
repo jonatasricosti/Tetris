@@ -47,11 +47,15 @@ SDL_Surface *iconImage = NULL;
 SDL_Surface *backgroundImage = NULL;
 
 
+SDL_Surface *TilesImage = NULL;
+
+
 // use essa função pra carregar arquivos
 // nota: essa função só deve ser chamada no começo do programa
 void LoadFiles()
 {
     backgroundImage = SDL_LoadBMP("background.bmp");
+    TilesImage = SDL_LoadBMP("tiles.bmp");
 }
 
 // use essa função pra fechar arquivos
@@ -60,12 +64,50 @@ void CloseFiles()
 {
     SDL_FreeSurface(iconImage);
     SDL_FreeSurface(backgroundImage);
+    SDL_FreeSurface(TilesImage);
 }
 
 // desenha o background na tela do jogo
 void DrawBackground()
 {
     DrawImage(0,0,backgroundImage);
+}
+
+// 7 peças cada bloco é formado por 4 números
+int figures[7][4]
+{
+    1,3,5,7, // I
+    2,4,5,7, // Z
+    3,5,4,6, // S
+    3,5,4,7, // T
+    2,3,5,7, // L
+    3,5,7,6, // J
+    2,3,4,5, // O
+};
+
+class Point
+{
+    public:
+    int x;
+    int y;
+};
+
+Point a[4];
+
+// desenha a peça do jogo de modo aleatório
+void DrawPieces()
+{
+    static int CurrentPiece=rand() % 7;   // peça aleatória
+    static int color = (1+rand() % 7)*18; // cor aleatória
+
+    const int x_space = 28;
+    const int y_space = 31;
+    for(int i = 0; i < 4; i++)
+    {
+        a[i].x = figures[CurrentPiece][i] % 2;
+        a[i].y = figures[CurrentPiece][i] / 2;
+        DrawCutImage(x_space+a[i].x*18,y_space+a[i].y*18,color,0,18,18,TilesImage);
+    }
 }
 
 int main(int argc, char*args[])
@@ -97,6 +139,8 @@ while(executando)
     SDL_FillRect(tela, 0, 0xffffff);
 
     DrawBackground();
+
+    DrawPieces();
 
     SDL_Flip(tela);
     if(framerate > (SDL_GetTicks()-start))
