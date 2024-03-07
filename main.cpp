@@ -13,10 +13,15 @@ Uint32 start = 0;
 const int fps = 30;
 const int framerate =  1000/fps;
 
+
+SDL_Surface *iconImage = NULL;
+
 int main(int argc, char*args[])
 {
 SDL_Init(SDL_INIT_EVERYTHING);
 
+iconImage = SDL_LoadBMP("icon.bmp");
+SDL_WM_SetIcon(iconImage, NULL);
 SDL_putenv("SDL_VIDEO_WINDOW_POS=center");
 tela = SDL_SetVideoMode(screen_width,screen_height,screen_bpp,SDL_SWSURFACE);
 SDL_WM_SetCaption("Tetris", NULL);
@@ -43,6 +48,7 @@ while(executando)
     }
 }
 
+SDL_FreeSurface(iconImage);
 SDL_Quit();
 return 0;
 }
