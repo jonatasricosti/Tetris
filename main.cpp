@@ -13,8 +13,50 @@ Uint32 start = 0;
 const int fps = 30;
 const int framerate =  1000/fps;
 
+// use essa função pra desenhar uma imagem
+void DrawImage(int x, int y, SDL_Surface *image)
+{
+    SDL_Rect mover;
+    mover.x = x;
+    mover.y = y;
+
+    SDL_BlitSurface(image, NULL, tela, &mover);
+}
+
+
+// use essa função pra desenhar uma imagem cortada na tela
+// nota: os valores de corte você pode pegar no gimp
+void DrawCutImage(int x, int y, int cx, int cy, int cw, int ch, SDL_Surface *image)
+{
+    SDL_Rect mover;
+    mover.x = x;
+    mover.y = y;
+
+    SDL_Rect corte;
+    corte.x = cx;
+    corte.y = cy;
+    corte.w = cw;
+    corte.h = ch;
+
+    SDL_BlitSurface(image, &corte, tela, &mover);
+}
+
 
 SDL_Surface *iconImage = NULL;
+
+
+// use essa função pra carregar arquivos
+// nota: essa função só deve ser chamada no começo do programa
+void LoadFiles()
+{
+}
+
+// use essa função pra fechar arquivos
+// nota: essa função só deve ser chamada no final do programa
+void CloseFiles()
+{
+    SDL_FreeSurface(iconImage);
+}
 
 int main(int argc, char*args[])
 {
@@ -25,6 +67,8 @@ SDL_WM_SetIcon(iconImage, NULL);
 SDL_putenv("SDL_VIDEO_WINDOW_POS=center");
 tela = SDL_SetVideoMode(screen_width,screen_height,screen_bpp,SDL_SWSURFACE);
 SDL_WM_SetCaption("Tetris", NULL);
+
+LoadFiles();
 
 
 // game loop
@@ -48,7 +92,9 @@ while(executando)
     }
 }
 
-SDL_FreeSurface(iconImage);
+
+
+CloseFiles();
 SDL_Quit();
 return 0;
 }
