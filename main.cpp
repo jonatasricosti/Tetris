@@ -93,18 +93,48 @@ class Point
 
 Point a[4];
 
+
+// essa função move a peça pra baixo
+// nota: esse código é provisório
+void MoveDown()
+{
+    static int timer = 0;
+    static int delay = 10;
+
+    timer++;
+    if(timer > delay)
+    {
+        for(int i = 0; i < 4; i++)
+        {
+            a[i].y = a[i].y + 1;
+        }
+        timer = 0;
+    }
+}
+
 // desenha a peça do jogo de modo aleatório
 void DrawPieces()
 {
-    static int CurrentPiece=rand() % 7;   // peça aleatória
+    static int CurrentPiece = rand() % 7;   // peça aleatória
     static int color = (1+rand() % 7)*18; // cor aleatória
 
     const int x_space = 28;
     const int y_space = 31;
+
+    static int check = 1;
+
+    if(check == 1)
+    {
+        for(int i = 0; i < 4; i++)
+        {
+            a[i].x = figures[CurrentPiece][i] % 2;
+            a[i].y = figures[CurrentPiece][i] / 2;
+            check = 2;
+        }
+    }
+
     for(int i = 0; i < 4; i++)
     {
-        a[i].x = figures[CurrentPiece][i] % 2;
-        a[i].y = figures[CurrentPiece][i] / 2;
         DrawCutImage(x_space+a[i].x*18,y_space+a[i].y*18,color,0,18,18,TilesImage);
     }
 }
@@ -136,6 +166,8 @@ while(executando)
     }
 
     SDL_FillRect(tela, 0, 0xffffff);
+
+    MoveDown();
 
     DrawBackground();
     DrawPieces();
