@@ -91,7 +91,17 @@ class Point
     int y;
 };
 
-Point a[4];
+Point a[4]; // array de objetos pra mover e desenhar as peças do jogo
+Point b[4]; // objetos auxiliares pra copiar as posisões dos objetos a[0],a[1],a[2],a[3]
+
+
+// na nossa grade a gente tem
+// 20 células na linha
+// 10 células na coluna
+const int M = 20;
+const int N = 10;
+// matriz do campo
+int field[M][N] = {0};
 
 
 // essa função move a peça pra baixo
@@ -139,6 +149,37 @@ void DrawPieces()
     }
 }
 
+
+// o campo é quando as peças colidem em baixo do jogo
+// desenha o campo/field se tiver o valor na matriz field
+void DrawField()
+{
+    for(int i=0; i < M ; i++)
+    {
+        for (int j=0; j < N ; j++)
+        {
+            if (field[i][j]==0)
+            {
+                 continue;
+            }
+
+            DrawCutImage(28+j*18,31+i*18,field[i][j]*18,0,18,18,TilesImage);
+        }
+    }
+}
+
+// inicia a primeira peça do jogo
+void Init()
+{
+    // primeira peça
+    const int firstFigure = rand() % 7;
+    for (int i = 0; i < 4; i++)
+    {
+        a[i].x = figures[firstFigure][i] % 2;
+        a[i].y = figures[firstFigure][i] / 2;
+    }
+}
+
 int main(int argc, char*args[])
 {
 SDL_Init(SDL_INIT_EVERYTHING);
@@ -149,6 +190,7 @@ SDL_putenv("SDL_VIDEO_WINDOW_POS=center");
 tela = SDL_SetVideoMode(screen_width,screen_height,screen_bpp,SDL_SWSURFACE);
 SDL_WM_SetCaption("Tetris", NULL);
 
+Init();
 LoadFiles();
 
 
@@ -171,6 +213,7 @@ while(executando)
 
     DrawBackground();
     DrawPieces();
+    DrawField();
 
     SDL_Flip(tela);
     if(framerate > (SDL_GetTicks()-start))
