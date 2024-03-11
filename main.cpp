@@ -166,6 +166,31 @@ void MovePiece()
     }
 }
 
+void RotatePiece()
+{
+    if(IcanRotate == true)
+    {
+        Point p = a[1]; // centro de rotação
+
+        for(int i = 0; i < 4; i++)
+        {
+            int x = a[i].y  - p.y;
+            int y = a[i].x  - p.x;
+
+            a[i].x = p.x - x;
+            a[i].y = p.y + y;
+        }
+
+        if(!check())
+        {
+            for(int i = 0; i < 4; i++)
+            {
+                a[i] = b[i];
+            }
+        }
+    }
+}
+
 void ticks()
 {
     timer++;
@@ -268,17 +293,27 @@ while(executando)
         {
             executando = false; // fecha o programa
         }
+
+        if(evento.type == SDL_KEYDOWN)
+        {
+            switch(evento.key.keysym.sym)
+            {
+                case SDLK_UP: IcanRotate = true; break;
+            }
+        }
     }
 
     SDL_FillRect(tela, 0, 0xffffff);
 
     MovePiece();
+    RotatePiece();
     ticks();
     DrawBackground();
     DrawPieces();
     DrawField();
 
     dx = 0;
+    IcanRotate = false;
 
     SDL_Flip(tela);
     if(framerate > (SDL_GetTicks()-start))
