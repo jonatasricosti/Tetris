@@ -191,6 +191,31 @@ void RotatePiece()
     }
 }
 
+void CheckLine()
+{
+    int k = M - 1;
+    for(int i = M - 1; i > 0; i--)
+    {
+        int count = 0;
+        for(int j = 0; j < N; j++)
+        {
+            if(field[i][j])
+            {
+                count++;
+            }
+
+            field[k][j] = field[i][j];
+        }
+        if(count < N)
+        {
+            k--;
+        }
+    }
+
+    dx = 0;
+    IcanRotate = false;
+}
+
 void ticks()
 {
     timer++;
@@ -308,12 +333,10 @@ while(executando)
     MovePiece();
     RotatePiece();
     ticks();
+    CheckLine();
     DrawBackground();
     DrawPieces();
     DrawField();
-
-    dx = 0;
-    IcanRotate = false;
 
     SDL_Flip(tela);
     if(framerate > (SDL_GetTicks()-start))
