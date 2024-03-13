@@ -64,7 +64,7 @@ void CloseFiles()
     SDL_FreeSurface(TilesImage);
 }
 
-// desenha o background na tela do jogo
+// essa função desenha o background na tela do jogo
 void DrawBackground()
 {
     DrawImage(0,0,backgroundImage);
@@ -218,7 +218,7 @@ void CheckLine()
     IcanRotate = false;
 }
 
-// essa controla o tempo e a aleatoriedade das cores e peças do jogo
+// essa função controla o tempo e a aleatoriedade das cores e peças do jogo
 void Ticks()
 {
     timer++;
@@ -251,7 +251,7 @@ void Ticks()
     }
 }
 
-// desenha as peças do jogo
+// essa função desenha as peças do jogo
 void DrawPieces()
 {
     for(int i = 0; i < 4; i++)
@@ -261,7 +261,7 @@ void DrawPieces()
 }
 
 // o campo é quando as peças colidem em baixo do jogo
-// desenha o campo/field se tiver o valor na matriz field
+// essa função desenha o campo/field se tiver o valor na matriz field
 void DrawField()
 {
     for(int i = 0 ; i < M ; i++)
@@ -278,7 +278,7 @@ void DrawField()
     }
 }
 
-// inicia a primeira peça do jogo
+// essa função inicia a primeira peça do jogo
 void Init()
 {
     // primeira peça
