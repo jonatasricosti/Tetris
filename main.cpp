@@ -7,6 +7,8 @@ bool executando = true;
 const int screen_width = 320;
 const int screen_height = 480;
 const int screen_bpp = 32;
+const int x_space = 28;
+const int y_space = 31;
 
 // para o framerate
 Uint32 start = 0;
@@ -22,7 +24,6 @@ void DrawImage(int x, int y, SDL_Surface *image)
 
     SDL_BlitSurface(image, NULL, tela, &mover);
 }
-
 
 // use essa função pra desenhar uma imagem cortada na tela
 // nota: os valores de corte você pode pegar no gimp
@@ -41,11 +42,10 @@ void DrawCutImage(int x, int y, int cx, int cy, int cw, int ch, SDL_Surface *ima
     SDL_BlitSurface(image, &corte, tela, &mover);
 }
 
-
+// objetos ponteiros
 SDL_Surface *iconImage = NULL;
 SDL_Surface *backgroundImage = NULL;
 SDL_Surface *TilesImage = NULL;
-
 
 // use essa função pra carregar arquivos
 // nota: essa função só deve ser chamada no começo do programa
@@ -84,6 +84,7 @@ int figures[7][4]
     2,3,4,5, // O
 };
 
+// essa classe representa um ponto
 class Point
 {
     public:
@@ -92,8 +93,7 @@ class Point
 };
 
 Point a[4]; // array de objetos pra mover e desenhar as peças do jogo
-Point b[4]; // objetos auxiliares pra copiar as posisões dos objetos a[0],a[1],a[2],a[3]
-
+Point b[4]; // objetos auxiliares pra copiar as posições dos objetos a[0],a[1],a[2],a[3]
 
 // na nossa grade a gente tem
 // 20 células na linha
@@ -102,15 +102,15 @@ const int M = 20;
 const int N = 10;
 // matriz do campo
 int field[M][N] = {0};
-
-
-int CurrentPiece = rand() % 7;   // peça aleatória
+// variáveis
 int color = (1+rand() % 7); // cor aleatória
+int CurrentPiece = rand() % 7; // peça aleatória
 float timer = 0;
 float delay = 10;
 int dx = 0;
 bool IcanRotate = false;
 
+// função de colisão
 bool check()
 {
     for(int i = 0; i < 4; i++)
@@ -120,7 +120,7 @@ bool check()
             return false;
         }
 
-        else if(field[ a[i].y][a[i].x])
+        else if(field[a[i].y][a[i].x])
         {
             return false;
         }
@@ -129,7 +129,7 @@ bool check()
     return true;
 }
 
-
+// essa função controla a física do jogo
 void MovePiece()
 {
     Uint8 *tecla = SDL_GetKeyState(NULL);
@@ -166,6 +166,7 @@ void MovePiece()
     }
 }
 
+// essa função rotaciona/gira a peça
 void RotatePiece()
 {
     if(IcanRotate == true)
@@ -191,6 +192,7 @@ void RotatePiece()
     }
 }
 
+// essa função deleta as linhas horizontais do jogo quando elas são preenchidas
 void CheckLine()
 {
     int k = M - 1;
@@ -216,7 +218,8 @@ void CheckLine()
     IcanRotate = false;
 }
 
-void ticks()
+// essa controla o tempo e a aleatoriedade das cores e peças do jogo
+void Ticks()
 {
     timer++;
     if(timer > delay)
@@ -233,8 +236,8 @@ void ticks()
             {
                 field[b[i].y][b[i].x] = color;
             }
-            color = 1 + rand() % 7;
-            CurrentPiece = rand() % 7;
+            color = 1 + rand() % 7; // cor aleatória
+            CurrentPiece = rand() % 7; // peça aleatória
 
             for(int i = 0; i < 4; i++)
             {
@@ -248,35 +251,29 @@ void ticks()
     }
 }
 
-
-// desenha a peça do jogo de modo aleatório
+// desenha as peças do jogo
 void DrawPieces()
 {
-
-    const int x_space = 28;
-    const int y_space = 31;
-
     for(int i = 0; i < 4; i++)
     {
         DrawCutImage(x_space+a[i].x*18,y_space+a[i].y*18,color*18,0,18,18,TilesImage);
     }
 }
 
-
 // o campo é quando as peças colidem em baixo do jogo
 // desenha o campo/field se tiver o valor na matriz field
 void DrawField()
 {
-    for(int i=0; i < M ; i++)
+    for(int i = 0 ; i < M ; i++)
     {
-        for (int j=0; j < N ; j++)
+        for (int j = 0; j < N ; j++)
         {
             if (field[i][j]==0)
             {
                  continue;
             }
 
-            DrawCutImage(28+j*18,31+i*18,field[i][j]*18,0,18,18,TilesImage);
+            DrawCutImage(x_space+j*18,y_space+i*18,field[i][j]*18,0,18,18,TilesImage);
         }
     }
 }
@@ -328,26 +325,25 @@ while(executando)
         }
     }
 
-    SDL_FillRect(tela, 0, 0xffffff);
+    SDL_FillRect(tela, 0, 0xffffff); // desenha um retângulo branco do tamanho da tela
 
     MovePiece();
     RotatePiece();
-    ticks();
+    Ticks();
     CheckLine();
     DrawBackground();
-    DrawPieces();
     DrawField();
+    DrawPieces();
 
-    SDL_Flip(tela);
+    SDL_Flip(tela); // atualiza a tela
     if(framerate > (SDL_GetTicks()-start))
     {
         SDL_Delay(framerate - (SDL_GetTicks()-start));
     }
 }
 
-
-
 CloseFiles();
 SDL_Quit();
 return 0;
 }
+
